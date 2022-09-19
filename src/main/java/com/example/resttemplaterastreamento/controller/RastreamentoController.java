@@ -1,45 +1,115 @@
 package com.example.resttemplaterastreamento.controller;
 
 import com.example.resttemplaterastreamento.model.Clientes;
+import com.example.resttemplaterastreamento.model.ClientesRequest;
+import com.example.resttemplaterastreamento.model.ClientesResponse;
 import com.example.resttemplaterastreamento.service.RastreamentoService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/rastreamento")
 public class RastreamentoController {
 
+    private static final Logger logger = LoggerFactory.getLogger(RastreamentoController.class);
+
     @Autowired
     private RastreamentoService service;
 
     @GetMapping()
-    public Clientes[] get() {return service.getClientes();}
+    public ResponseEntity<List<ClientesResponse>> getAllClientes() {
+        logger.info("m=getAllClientes - status=start");
+        List<Clientes> clientesList = service.findAllClientes();
+        List<ClientesResponse> clientesResponseList = clientesList.stream().map(clientes -> new ClientesResponse()
+                .withBuilderId(clientes.getId())
+                .withBuilderBairro(clientes.getBairro())
+                .withBuilderCidade(clientes.getCidade())
+                .withBuilderNome(clientes.getNome())
+                .withBuilderRua(clientes.getRua())
+                .withBuilderNumero_logradouro(clientes.getNumero_logradouro())
+                .withBuilderTelefone(clientes.getTelefone())).collect(Collectors.toList());
+        logger.info("m=getAllClientes - status=finish");
+        return new ResponseEntity<>(clientesResponseList, HttpStatus.OK);
+    }
+
 
     @GetMapping("/{id}")
-    public Clientes get(@PathVariable("id") UUID id) {return service.getClientesById(id);}
+    public ResponseEntity<ClientesResponse> getIdClientes(@PathVariable("id") UUID id) {
+        logger.info("m=getIdClientes - status=start " + id);
+        Clientes clientes = service.getClientesById(id);
+        ClientesResponse response = new ClientesResponse()
+                .withBuilderId(clientes.getId())
+                .withBuilderBairro(clientes.getBairro())
+                .withBuilderCidade(clientes.getCidade())
+                .withBuilderNome(clientes.getNome())
+                .withBuilderRua(clientes.getRua())
+                .withBuilderNumero_logradouro(clientes.getNumero_logradouro())
+                .withBuilderTelefone(clientes.getTelefone());
+        logger.info("m=getIdClientes - status=finish " + id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+
+    }
 
     @PostMapping
-    public ResponseEntity<Clientes> post(@RequestBody Clientes clientes){
-        Clientes c = service.insert(clientes);
-        return  new ResponseEntity(c, HttpStatus.CREATED);
+    public ResponseEntity<ClientesResponse> postClientes(@RequestBody ClientesRequest clientesRequest){
+        ResponseEntity<ClientesResponse> result;
+        logger.info("m=postClientes - status=start");
+        Clientes clientes = service.save(new Clientes()
+                .withBuilderBairro(clientesRequest.getBairro())
+                .withBuilderCidade(clientesRequest.getCidade())
+                .withBuilderNome(clientesRequest.getNome())
+                .withBuilderRua(clientesRequest.getRua())
+                .withBuilderNumero_logradouro(clientesRequest.getNumero_logradouro())
+                .withBuilderTelefone(clientesRequest.getTelefone()));
+
+        ClientesResponse response = new ClientesResponse()
+                .withBuilderId(clientes.getId())
+                .withBuilderBairro(clientes.getBairro())
+                .withBuilderCidade(clientes.getCidade())
+                .withBuilderNome(clientes.getNome())
+                .withBuilderRua(clientes.getRua())
+                .withBuilderNumero_logradouro(clientes.getNumero_logradouro())
+                .withBuilderTelefone(clientes.getTelefone());
+
+        result = new ResponseEntity<>(response,HttpStatus.CREATED);
+        logger.info("m=postClientes - status=finish");
+        return result;
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Clientes> put(@PathVariable("id") UUID id, @RequestBody Clientes clientes){
-        Clientes clientesDto = new Clientes();
-        clientesDto.setBairro(clientes.getBairro());
-        clientesDto.setCidade(clientes.getCidade());
-        clientesDto.setNome(clientes.getNome());
-        clientesDto.setNumero_logradouro(clientes.getNumero_logradouro());
-        clientesDto.setRua(clientes.getRua());
-        clientesDto.setTelefone(clientes.getTelefone());
-        Clientes c = service.update(clientes,id);
+    public ResponseEntity<ClientesResponse> putClientes(@PathVariable("id") UUID id,
+                                                        @RequestBody ClientesRequest clientesRequest){
+        logger.info("m=putClientes - status=start " + id);
+        Clientes clientesUpdate = new Clientes()
+                .withBuiderId(UUID.randomUUID())
+                .withBuilderBairro(clientesRequest.getBairro())
+                .withBuilderCidade(clientesRequest.getCidade())
+                .withBuilderNome(clientesRequest.getNome())
+                .withBuilderRua(clientesRequest.getRua())
+                .withBuilderNumero_logradouro(clientesRequest.getNumero_logradouro())
+                .withBuilderTelefone(clientesRequest.getTelefone());
 
-        return new ResponseEntity<>(c, HttpStatus.ALREADY_REPORTED);
+        ClientesResponse response = new ClientesResponse()
+                .withBuilderId(clientesUpdate.getId())
+                .withBuilderBairro(clientesUpdate.getBairro())
+                .withBuilderCidade(clientesUpdate.getCidade())
+                .withBuilderNome(clientesUpdate.getNome())
+                .withBuilderRua(clientesUpdate.getRua())
+                .withBuilderNumero_logradouro(clientesUpdate.getNumero_logradouro())
+                .withBuilderTelefone(clientesUpdate.getTelefone());
+
+        Clientes clientesEntity = service.update(clientesUpdate,id);
+        logger.info("m=putClientes - status=finish " + id);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

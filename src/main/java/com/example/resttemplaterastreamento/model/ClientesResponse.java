@@ -2,7 +2,8 @@ package com.example.resttemplaterastreamento.model;
 
 import java.util.UUID;
 
-public class Clientes {
+public class ClientesResponse {
+
     private UUID id;
     private String bairro;
     private String cidade;
@@ -20,12 +21,22 @@ public class Clientes {
         this.id = id;
     }
 
+    public ClientesResponse withBuilderId(UUID id){
+        setId(id);
+        return this;
+    }
+
     public String getBairro() {
         return bairro;
     }
 
     public void setBairro(String bairro) {
         this.bairro = bairro;
+    }
+
+    public ClientesResponse withBuilderBairro(String bairro){
+        setBairro(bairro);
+        return this;
     }
 
     public String getCidade() {
@@ -36,12 +47,22 @@ public class Clientes {
         this.cidade = cidade;
     }
 
+    public ClientesResponse withBuilderCidade(String cidade){
+        setCidade(cidade);
+        return this;
+    }
+
     public String getNome() {
         return nome;
     }
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public ClientesResponse withBuilderNome(String nome){
+        setNome(nome);
+        return this;
     }
 
     public int getNumero_logradouro() {
@@ -52,12 +73,23 @@ public class Clientes {
         this.numero_logradouro = numero_logradouro;
     }
 
+    public ClientesResponse withBuilderNumero_logradouro(int numero_logradouro){
+        setNumero_logradouro(numero_logradouro);
+        return this;
+    }
+
+
     public String getRua() {
         return rua;
     }
 
     public void setRua(String rua) {
         this.rua = rua;
+    }
+
+    public ClientesResponse withBuilderRua(String rua){
+        setRua(rua);
+        return this;
     }
 
     public int getTelefone() {
@@ -68,37 +100,7 @@ public class Clientes {
         this.telefone = telefone;
     }
 
-    public Clientes withBuiderId(UUID id){
-        setId(id);
-        return this;
-    }
-
-    public Clientes withBuilderBairro(String bairro){
-        setBairro(bairro);
-        return this;
-    }
-
-    public Clientes withBuilderNome(String nome){
-        setNome(nome);
-        return this;
-    }
-
-    public Clientes withBuilderCidade(String cidade){
-        setCidade(cidade);
-        return this;
-    }
-
-    public Clientes withBuilderNumero_logradouro(int numero_logradouro){
-        setNumero_logradouro(numero_logradouro);
-        return this;
-    }
-
-    public Clientes withBuilderRua(String rua){
-        setRua(rua);
-        return this;
-    }
-
-    public Clientes withBuilderTelefone(int telefone){
+    public ClientesResponse withBuilderTelefone(int telefone){
         setTelefone(telefone);
         return this;
     }

@@ -1,2 +1,6 @@
 server:
   port: 8081
+## Rastreamento Crud ##
+resttemplate-rastreamento:
+  host: http://localhost:8080/
+  path: api/v1/rastreamento/
