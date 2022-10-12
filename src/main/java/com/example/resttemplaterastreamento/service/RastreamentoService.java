@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -52,19 +53,24 @@ public class RastreamentoService {
 
     public Clientes save(Clientes clientes) {
         logger.info("m=save - status=start");
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Partner", "Customers_Guilhem");
+        HttpEntity<Clientes> entity = new HttpEntity<>(clientes,headers);
         URI uri = URI.create(host + path);
         ResponseEntity<Clientes> clientesEntity =
-                restTemplate.postForEntity(uri, clientes, Clientes.class);
+                restTemplate.exchange(uri,HttpMethod.POST,entity, Clientes.class);
         logger.info("m=save - status=finish");
         return clientesEntity.getBody();
     }
 
     public Clientes update(Clientes clientes, UUID id) {
         logger.info("m=update - status=start " + clientes.getId());
-        HttpEntity requestEntity = new HttpEntity<>(clientes);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Partner", "Customers_Guilhem");
+        HttpEntity<Clientes> entity = new HttpEntity<>(clientes,headers);
         URI uri = URI.create(host + path + id);
         ResponseEntity<Clientes> clientesEntity =
-                restTemplate.exchange(uri,HttpMethod.PUT,requestEntity, Clientes.class);
+                restTemplate.exchange(uri,HttpMethod.PUT,entity, Clientes.class);
         logger.info("m=update - status=finish " + clientes.getId());
         return clientesEntity.getBody();
 

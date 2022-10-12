@@ -59,9 +59,10 @@ public class RastreamentoController {
     }
 
     @PostMapping
-    public ResponseEntity<ClientesResponse> postClientes(@RequestBody ClientesRequest clientesRequest){
+    public ResponseEntity<ClientesResponse> postClientes(@RequestBody ClientesRequest clientesRequest,
+                                                         @RequestHeader (value = "Partner") String Partner){
         ResponseEntity<ClientesResponse> result;
-        logger.info("m=postClientes - status=start");
+        logger.info("m=postClientes - status=start " + Partner);
         Clientes clientes = service.save(new Clientes()
                 .withBuilderBairro(clientesRequest.getBairro())
                 .withBuilderCidade(clientesRequest.getCidade())
@@ -80,14 +81,15 @@ public class RastreamentoController {
                 .withBuilderTelefone(clientes.getTelefone());
 
         result = new ResponseEntity<>(response,HttpStatus.CREATED);
-        logger.info("m=postClientes - status=finish");
+        logger.info("m=postClientes - status=finish " + Partner);
         return result;
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ClientesResponse> putClientes(@PathVariable("id") UUID id,
-                                                        @RequestBody ClientesRequest clientesRequest){
-        logger.info("m=putClientes - status=start " + id);
+                                                        @RequestBody ClientesRequest clientesRequest,
+                                                        @RequestHeader (value = "Partner") String Partner){
+        logger.info("m=putClientes - status=start " + id + " " + Partner);
         Clientes clientesUpdate = new Clientes()
                 .withBuiderId(UUID.randomUUID())
                 .withBuilderBairro(clientesRequest.getBairro())
@@ -107,7 +109,7 @@ public class RastreamentoController {
                 .withBuilderTelefone(clientesUpdate.getTelefone());
 
         Clientes clientesEntity = service.update(clientesUpdate,id);
-        logger.info("m=putClientes - status=finish " + id);
+        logger.info("m=putClientes - status=finish " + id + " " + Partner);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
