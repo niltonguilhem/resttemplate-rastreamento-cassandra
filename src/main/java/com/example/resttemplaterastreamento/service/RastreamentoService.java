@@ -41,7 +41,6 @@ public class RastreamentoService {
         logger.info("m=findAllEstoque - status=finish");
         return clientes;
     }
-
     public Clientes getClientesById(UUID id) {
         logger.info("m=getClienteById - status=start " + id);
         URI uri = UriComponentsBuilder.fromHttpUrl(host + path + id)
@@ -50,7 +49,6 @@ public class RastreamentoService {
         logger.info("m=getClienteById - status=finish " + id);
         return clientes;
     }
-
     public Clientes save(Clientes clientes) {
         logger.info("m=save - status=start");
         HttpHeaders headers = new HttpHeaders();
@@ -62,7 +60,6 @@ public class RastreamentoService {
         logger.info("m=save - status=finish");
         return clientesEntity.getBody();
     }
-
     public Clientes update(Clientes clientes, UUID id) {
         logger.info("m=update - status=start " + clientes.getId());
         HttpHeaders headers = new HttpHeaders();
@@ -73,9 +70,7 @@ public class RastreamentoService {
                 restTemplate.exchange(uri,HttpMethod.PUT,entity, Clientes.class);
         logger.info("m=update - status=finish " + clientes.getId());
         return clientesEntity.getBody();
-
     }
-
     public void delete(UUID id) {
         logger.info("m=delete - status=start");
         URI uri = URI.create(host + path + id);

@@ -39,8 +39,6 @@ public class RastreamentoController {
         logger.info("m=getAllClientes - status=finish");
         return new ResponseEntity<>(clientesResponseList, HttpStatus.OK);
     }
-
-
     @GetMapping("/{id}")
     public ResponseEntity<ClientesResponse> getIdClientes(@PathVariable("id") UUID id) {
         logger.info("m=getIdClientes - status=start " + id);
@@ -55,9 +53,7 @@ public class RastreamentoController {
                 .withBuilderTelefone(clientes.getTelefone());
         logger.info("m=getIdClientes - status=finish " + id);
         return new ResponseEntity<>(response, HttpStatus.OK);
-
     }
-
     @PostMapping
     public ResponseEntity<ClientesResponse> postClientes(@RequestBody ClientesRequest clientesRequest,
                                                          @RequestHeader (value = "Partner") String Partner){
@@ -84,7 +80,6 @@ public class RastreamentoController {
         logger.info("m=postClientes - status=finish " + Partner);
         return result;
     }
-
     @PutMapping("/{id}")
     public ResponseEntity<ClientesResponse> putClientes(@PathVariable("id") UUID id,
                                                         @RequestBody ClientesRequest clientesRequest,
@@ -113,7 +108,6 @@ public class RastreamentoController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") UUID id) { service.delete(id);}
 

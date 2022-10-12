@@ -25,7 +25,6 @@ public class ClientesResponse {
         setId(id);
         return this;
     }
-
     public String getBairro() {
         return bairro;
     }
@@ -77,8 +76,6 @@ public class ClientesResponse {
         setNumero_logradouro(numero_logradouro);
         return this;
     }
-
-
     public String getRua() {
         return rua;
     }
@@ -91,7 +88,6 @@ public class ClientesResponse {
         setRua(rua);
         return this;
     }
-
     public int getTelefone() {
         return telefone;
     }

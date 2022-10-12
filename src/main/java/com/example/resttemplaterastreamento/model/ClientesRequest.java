@@ -21,7 +21,6 @@ public class ClientesRequest{
         this.rua = rua;
         this.telefone = telefone;
     }
-
     public String getBairro() {
             return bairro;
         }
