@@ -4,6 +4,7 @@ import com.example.resttemplaterastreamento.model.Clientes;
 import com.example.resttemplaterastreamento.model.ClientesRequest;
 import com.example.resttemplaterastreamento.model.ClientesResponse;
 import com.example.resttemplaterastreamento.service.RastreamentoService;
+import com.example.resttemplaterastreamento.utils.RastreamentoUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,16 +57,17 @@ public class RastreamentoController {
     }
     @PostMapping
     public ResponseEntity<ClientesResponse> postClientes(@RequestBody ClientesRequest clientesRequest,
-                                                         @RequestHeader (value = "Partner") String Partner){
+                                                         @RequestHeader String partner) throws Exception {
+        RastreamentoUtils.validatedHeader(partner);
         ResponseEntity<ClientesResponse> result;
-        logger.info("m=postClientes - status=start " + Partner);
+        logger.info("m=postClientes - status=start " + partner);
         Clientes clientes = service.save(new Clientes()
                 .withBuilderBairro(clientesRequest.getBairro())
                 .withBuilderCidade(clientesRequest.getCidade())
                 .withBuilderNome(clientesRequest.getNome())
                 .withBuilderRua(clientesRequest.getRua())
                 .withBuilderNumero_logradouro(clientesRequest.getNumero_logradouro())
-                .withBuilderTelefone(clientesRequest.getTelefone()));
+                .withBuilderTelefone(clientesRequest.getTelefone()),partner);
 
         ClientesResponse response = new ClientesResponse()
                 .withBuilderId(clientes.getId())
@@ -77,14 +79,15 @@ public class RastreamentoController {
                 .withBuilderTelefone(clientes.getTelefone());
 
         result = new ResponseEntity<>(response,HttpStatus.CREATED);
-        logger.info("m=postClientes - status=finish " + Partner);
+        logger.info("m=postClientes - status=finish " + partner);
         return result;
     }
     @PutMapping("/{id}")
     public ResponseEntity<ClientesResponse> putClientes(@PathVariable("id") UUID id,
                                                         @RequestBody ClientesRequest clientesRequest,
-                                                        @RequestHeader (value = "Partner") String Partner){
-        logger.info("m=putClientes - status=start " + id + " " + Partner);
+                                                        @RequestHeader String partner) throws Exception {
+        RastreamentoUtils.validatedHeader(partner);
+        logger.info("m=putClientes - status=start " + id + " " + partner);
         Clientes clientesUpdate = new Clientes()
                 .withBuiderId(UUID.randomUUID())
                 .withBuilderBairro(clientesRequest.getBairro())
@@ -103,8 +106,8 @@ public class RastreamentoController {
                 .withBuilderNumero_logradouro(clientesUpdate.getNumero_logradouro())
                 .withBuilderTelefone(clientesUpdate.getTelefone());
 
-        Clientes clientesEntity = service.update(clientesUpdate,id);
-        logger.info("m=putClientes - status=finish " + id + " " + Partner);
+        Clientes clientesEntity = service.update(clientesUpdate,id,partner);
+        logger.info("m=putClientes - status=finish " + id + " " + partner);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

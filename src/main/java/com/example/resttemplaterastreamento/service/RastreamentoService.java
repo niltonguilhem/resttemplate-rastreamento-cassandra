@@ -49,10 +49,10 @@ public class RastreamentoService {
         logger.info("m=getClienteById - status=finish " + id);
         return clientes;
     }
-    public Clientes save(Clientes clientes) {
+    public Clientes save(Clientes clientes, String partner) {
         logger.info("m=save - status=start");
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Partner", "Customers_Guilhem");
+        headers.add("partner", partner);
         HttpEntity<Clientes> entity = new HttpEntity<>(clientes,headers);
         URI uri = URI.create(host + path);
         ResponseEntity<Clientes> clientesEntity =
@@ -60,10 +60,10 @@ public class RastreamentoService {
         logger.info("m=save - status=finish");
         return clientesEntity.getBody();
     }
-    public Clientes update(Clientes clientes, UUID id) {
+    public Clientes update(Clientes clientes, UUID id, String patner) {
         logger.info("m=update - status=start " + clientes.getId());
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Partner", "Customers_Guilhem");
+        headers.add("partner", patner);
         HttpEntity<Clientes> entity = new HttpEntity<>(clientes,headers);
         URI uri = URI.create(host + path + id);
         ResponseEntity<Clientes> clientesEntity =
